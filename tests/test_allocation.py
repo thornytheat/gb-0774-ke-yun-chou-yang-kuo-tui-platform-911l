@@ -34,5 +34,5 @@ def test_zero_kept_unknown(dirty):
 
 def test_bad_quota_rejected():
     with pytest.raises(SurveyProblem) as exc:
-        largest_remainders({'direct':'1/3','transfer':'1/3','other':'1/3'},2)
+        largest_remainders({'direct':'1/3','transfer':'1/3','other':'1/3'},2,('direct','transfer','other'))
     assert exc.value.code=='BAD_QUOTA'

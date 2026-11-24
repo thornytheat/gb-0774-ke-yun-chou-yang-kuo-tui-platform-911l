@@ -13,6 +13,8 @@
 3. 在扩推整数分配切换城北与枢纽，查看余数及补 1 的类别。
 4. 打开批次留档复跑，归档并复算。进入样本证据签发，下载带隔离行和规则版本的 JSON。
 
-`GET /api/survey/<stage>` 执行样例阶段，阶段名见 [DEPTH](docs/DEPTH.md)。向同一路径 POST `{"tables":{"returns":"...","frame":"..."}}` 可复核自己的 CSV。`POST /api/runs` 提交同样的 `tables` 或 `{"sample":"dirty"}`。`GET /api/runs/<id>` 查档，`POST /api/runs/<id>/rerun` 复算，`GET /api/export/<id>` 领取证据。
+`GET /api/survey/<stage>` 执行样例阶段，阶段名见 [DEPTH](docs/DEPTH.md)。向同一路径 POST `{"tables":{"returns":"...","frame":"..."}}` 可复核自己的 CSV。`POST /api/runs` 提交同样的 `tables` 或 `{"sample":"dirty"}`。`GET /api/runs/<id>` 查档，`POST /api/runs/<id>/rerun` 复算，`GET /api/export/<id>` 领取证据。`POST /api/releases` 按 `{"runs":[...]}` 合并签发同口径批次，不同口径的批次不能拼成一次签发。
+
+每批首次归档时绑定当时口径，此后只认该口径签：晚到数据沿用所属批次的口径，复算复现原结果，重复执行不新增留档。当前口径由 `SURVEY_SPEC` 指定，登记见 `app/specs.py`。
 
 字段和计算规则详见 [数据字典](docs/DATA-DICTIONARY.md)。本机测试执行 `python -m pytest -q`。

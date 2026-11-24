@@ -6,6 +6,7 @@ services:
       - "18473:8080"
     environment:
       SURVEY_ARCHIVE: var/survey.db
+      SURVEY_SPEC: survey-2026.1
     volumes:
       - survey-db:/opt/survey/var
 volumes:

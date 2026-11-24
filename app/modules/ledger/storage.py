@@ -34,6 +34,11 @@ class Archive:
                 db.executemany('INSERT INTO originals VALUES (?,?,?)',[(key,name,csv) for name,csv in tables.items()])
         return bool(created)
 
+    def find(self,key):
+        with self.connect() as db:
+            row = db.execute('SELECT document FROM runs WHERE id=?',(key,)).fetchone()
+        return json.loads(row[0]) if row else None
+
     def read(self,key):
         with self.connect() as db:
             row = db.execute('SELECT document,results FROM runs WHERE id=?',(key,)).fetchone()

@@ -2,6 +2,7 @@ import os
 
 from flask import Flask,jsonify
 
+from app import specs
 from app.api import survey
 from app.config import PORT
 from app.errors import SurveyProblem
@@ -10,6 +11,7 @@ from app.web import workbench
 
 
 def create_app(database=None):
+    specs.current()  # 未登记的口径在启动时直接拒绝
     app=Flask(__name__)
     app.config['MAX_CONTENT_LENGTH']=2_000_000
     app.extensions['survey_archive']=Archive(database or os.getenv('SURVEY_ARCHIVE','var/survey.db'))

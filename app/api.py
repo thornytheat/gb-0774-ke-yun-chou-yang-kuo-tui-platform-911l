@@ -2,7 +2,7 @@ from flask import Blueprint,current_app,jsonify,request
 
 from app.errors import SurveyProblem
 from app.modules.ledger.service import archive
-from app.modules.release.service import release
+from app.modules.release.service import release, release_all
 from app.pipeline import STAGES,run
 from app.source import sources
 
@@ -46,6 +46,16 @@ def get_run(key):
 def rerun(key):
     manifest,tables,_=storage().read(key)
     return jsonify(archive(storage(),tables,manifest))
+
+
+@survey.post('/releases')
+def new_release():
+    body = request.get_json(silent=True)
+    keys = body.get('runs') if isinstance(body,dict) else None
+    if not isinstance(keys,list) or not all(isinstance(key,str) for key in keys):
+        raise SurveyProblem('BAD_INPUT','请提交要合并签发的批次编号')
+    archives = [storage().read(key) for key in dict.fromkeys(keys)]
+    return jsonify(release_all(archives))
 
 
 @survey.get('/export/<key>')

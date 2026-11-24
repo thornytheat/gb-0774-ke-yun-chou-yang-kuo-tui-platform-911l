@@ -1,8 +1,6 @@
 import hashlib
 import json
 
-from app.config import SPEC
-
 
 def canonical(value):
     return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',',':'))
@@ -13,5 +11,6 @@ def sha(text):
 
 
 def identity(inputs):
+    # 批次编号只由原件内容决定，不含口径版本：同一批数据永远落在同一批次上
     hashes = {key:sha(text) for key,text in inputs.items()}
-    return sha(canonical({'files':hashes,'version':SPEC})), hashes
+    return sha(canonical({'files':hashes})), hashes
